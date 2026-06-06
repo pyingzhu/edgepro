@@ -7,6 +7,7 @@ import { Waveform } from "@/components/mic/waveform";
 import { TranscriptBubble } from "@/components/workspace/transcript-bubble";
 import { FsoaipCardGrid } from "@/components/workspace/fsoaip-card-grid";
 import { StatsStrip, type Metric } from "@/components/workspace/stats-strip";
+import { Button } from "@/components/primitives/button";
 import wandbMetrics from "@/data/fixtures/wandb-metrics.json";
 
 const MODELS = [
@@ -21,20 +22,28 @@ const MODELS = [
 const METRICS: Metric[] = wandbMetrics;
 
 export default function Page() {
-  const { state, startRecording, stopRecording, sendAudioFrame } =
+  const { state, startRecording, stopRecording, sendAudioFrame, reset } =
     useEdgeproSession({ models: MODELS });
 
   const mic = useMicCapture({ onFrame: sendAudioFrame });
 
+  // Single click — just request permission, don't start recording.
+  const enable = async () => {
+    await mic.requestPermission();
+  };
+
+  // Press & hold — only fires when permission is already granted.
   const press = async () => {
-    startRecording();
+    // If a previous session is sitting on the page, clear before starting fresh.
+    if (state.phase !== "idle") reset();
     try {
       await mic.start();
+      startRecording();
     } catch {
-      // mic.error is already set by the hook; revert the session phase
-      stopRecording();
+      // mic.error is set by the hook; workspace stays hidden because START never dispatched.
     }
   };
+
   const release = () => {
     mic.stop();
     stopRecording();
@@ -46,6 +55,11 @@ export default function Page() {
     highlighted: state.cards.length > 1 && c.modelId === "edgepro",
   }));
 
+  const allComplete =
+    state.cards.length > 0 && state.cards.every((c) => c.complete);
+
+  const isDenied = mic.permission === "denied";
+
   return (
     <main>
       <Hero
@@ -53,17 +67,26 @@ export default function Page() {
           <div className="flex flex-col items-center gap-4">
             <MicButton
               recording={mic.recording}
-              disabled={state.phase === "streaming" || state.phase === "error"}
+              permission={mic.permission}
+              disabled={state.phase === "streaming"}
               onPress={press}
               onRelease={release}
+              onEnable={enable}
             />
             <Waveform active={mic.recording} levelRef={mic.levelRef} />
             {mic.error && (
-              <p className="text-base text-danger max-w-md text-center">
-                {/^(NotAllowed|Permission)/i.test(mic.error)
-                  ? "Microphone permission denied. Enable mic access in your browser and reload."
-                  : `Mic error: ${mic.error}`}
-              </p>
+              <div className="text-center max-w-lg flex flex-col items-center gap-3">
+                <p className="text-base text-danger">
+                  {isDenied
+                    ? "Microphone access denied. Click below to try again, or enable mic access in your browser settings and reload."
+                    : `Mic error: ${mic.error}`}
+                </p>
+                {isDenied && (
+                  <Button variant="outline" size="lg" onClick={enable}>
+                    Allow microphone · マイクを許可
+                  </Button>
+                )}
+              </div>
             )}
           </div>
         }
@@ -82,6 +105,12 @@ export default function Page() {
           <FsoaipCardGrid cards={cards} />
           {state.cards.some((c) => c.complete) && (
             <StatsStrip metrics={METRICS} />
+          )}
+          {allComplete && (
+            <p className="mt-10 text-center text-base text-foreground-muted">
+              Press &amp; hold the mic to record another handover ·
+              もう一度マイクを押して新しい申し送り
+            </p>
           )}
         </section>
       )}

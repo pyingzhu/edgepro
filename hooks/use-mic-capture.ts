@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type Options = { onFrame: (pcm: ArrayBuffer) => void; sampleRate?: number };
 
+export type MicPermission = "unknown" | "prompt" | "granted" | "denied";
+
 export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
   const ctxRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -10,6 +12,44 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
   const levelRef = useRef<number>(0); // 0..1 most recent RMS
   const [recording, setRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [permission, setPermission] = useState<MicPermission>("unknown");
+
+  // Query the Permissions API after mount — survives reloads / detects pre-grants.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !navigator.permissions) {
+      setPermission("prompt");
+      return;
+    }
+    let active = true;
+    let permRef: PermissionStatus | null = null;
+    navigator.permissions
+      .query({ name: "microphone" as PermissionName })
+      .then((status) => {
+        if (!active) return;
+        permRef = status;
+        setPermission(status.state as MicPermission);
+        status.onchange = () => setPermission(status.state as MicPermission);
+      })
+      .catch(() => active && setPermission("prompt"));
+    return () => {
+      active = false;
+      if (permRef) permRef.onchange = null;
+    };
+  }, []);
+
+  // Just request permission — does NOT begin streaming.
+  const requestPermission = useCallback(async () => {
+    try {
+      setError(null);
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop());
+      setPermission("granted");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      setPermission("denied");
+    }
+  }, []);
 
   const start = useCallback(async () => {
     try {
@@ -33,9 +73,11 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
       // No output connection — we don't want feedback into speakers
       nodeRef.current = node;
       setRecording(true);
+      setPermission("granted");
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(msg);
+      if (/^(NotAllowed|Permission)/i.test(msg)) setPermission("denied");
       throw err; // re-throw so caller can revert session phase
     }
   }, [onFrame, sampleRate]);
@@ -53,5 +95,13 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
 
   useEffect(() => () => stop(), [stop]);
 
-  return { start, stop, recording, error, levelRef };
+  return {
+    start,
+    stop,
+    recording,
+    error,
+    levelRef,
+    permission,
+    requestPermission,
+  };
 }
