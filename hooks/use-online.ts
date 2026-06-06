@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export function useOnline(): boolean {
-  const [online, setOnline] = useState<boolean>(
-    typeof navigator !== "undefined" ? navigator.onLine : true,
-  );
+export function useOnline(): boolean | null {
+  // null until after first mount — keeps SSR & first client render identical
+  const [online, setOnline] = useState<boolean | null>(null);
   useEffect(() => {
+    setOnline(navigator.onLine);
     const on = () => setOnline(true);
     const off = () => setOnline(false);
     window.addEventListener("online", on);

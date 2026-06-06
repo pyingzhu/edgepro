@@ -11,7 +11,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-card bg-surface p-6 shadow-card",
+        "rounded-card bg-surface p-8 shadow-card",
         variant === "default" && "border border-border",
         variant === "highlighted" && "border border-accent shadow-glow-accent",
         variant === "muted" && "border border-border-subtle opacity-85",

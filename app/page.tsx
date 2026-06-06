@@ -28,7 +28,12 @@ export default function Page() {
 
   const press = async () => {
     startRecording();
-    await mic.start();
+    try {
+      await mic.start();
+    } catch {
+      // mic.error is already set by the hook; revert the session phase
+      stopRecording();
+    }
   };
   const release = () => {
     mic.stop();
@@ -52,9 +57,13 @@ export default function Page() {
               onPress={press}
               onRelease={release}
             />
-            <Waveform active={mic.recording} />
+            <Waveform active={mic.recording} levelRef={mic.levelRef} />
             {mic.error && (
-              <p className="text-xs text-danger">Mic error: {mic.error}</p>
+              <p className="text-base text-danger max-w-md text-center">
+                {/^(NotAllowed|Permission)/i.test(mic.error)
+                  ? "Microphone permission denied. Enable mic access in your browser and reload."
+                  : `Mic error: ${mic.error}`}
+              </p>
             )}
           </div>
         }
@@ -63,8 +72,10 @@ export default function Page() {
       {(state.transcript || state.cards.length > 0 || state.errorMessage) && (
         <section className="max-w-7xl mx-auto px-6 pb-24">
           {state.errorMessage && (
-            <div className="rounded-card border border-danger bg-danger-muted p-4 mb-6 text-sm">
-              {state.errorMessage}
+            <div className="rounded-card border border-danger bg-danger-muted p-5 mb-8 text-base">
+              {state.errorMessage === "WebSocket error"
+                ? "Backend not reachable on ws://localhost:8000/ws/session. Start it with: pnpm --filter @fully-booked/edgepro mock-server"
+                : state.errorMessage}
             </div>
           )}
           <TranscriptBubble text={state.transcript} />

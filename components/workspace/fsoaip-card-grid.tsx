@@ -5,7 +5,7 @@ export function FsoaipCardGrid({ cards }: { cards: ModelOutput[] }) {
   if (cards.length === 0) return null;
   return (
     <div
-      className="grid gap-6"
+      className="grid gap-8"
       style={{
         gridTemplateColumns: `repeat(${cards.length}, minmax(0, 1fr))`,
       }}

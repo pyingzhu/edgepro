@@ -19,6 +19,7 @@ const buttonVariants = cva(
         md: "h-10 px-4 text-sm",
         lg: "h-14 px-6 text-base",
         xl: "h-20 px-8 text-lg",
+        "2xl": "h-24 px-12 text-xl",
       },
       shape: {
         default: "rounded-button",

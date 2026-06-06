@@ -7,6 +7,7 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
   const ctxRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const nodeRef = useRef<AudioWorkletNode | null>(null);
+  const levelRef = useRef<number>(0); // 0..1 most recent RMS
   const [recording, setRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,13 +23,20 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
       await ctx.audioWorklet.addModule("/worklets/pcm-worklet.js");
       const source = ctx.createMediaStreamSource(stream);
       const node = new AudioWorkletNode(ctx, "pcm-worklet");
-      node.port.onmessage = (e: MessageEvent<ArrayBuffer>) => onFrame(e.data);
+      node.port.onmessage = (
+        e: MessageEvent<{ pcm: ArrayBuffer; rms: number }>,
+      ) => {
+        levelRef.current = e.data.rms;
+        onFrame(e.data.pcm);
+      };
       source.connect(node);
       // No output connection — we don't want feedback into speakers
       nodeRef.current = node;
       setRecording(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      throw err; // re-throw so caller can revert session phase
     }
   }, [onFrame, sampleRate]);
 
@@ -39,10 +47,11 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
     nodeRef.current = null;
     streamRef.current = null;
     ctxRef.current = null;
+    levelRef.current = 0;
     setRecording(false);
   }, []);
 
   useEffect(() => () => stop(), [stop]);
 
-  return { start, stop, recording, error };
+  return { start, stop, recording, error, levelRef };
 }

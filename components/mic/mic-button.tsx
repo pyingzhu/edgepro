@@ -15,7 +15,7 @@ export function MicButton({
 }) {
   return (
     <Button
-      size="xl"
+      size="2xl"
       shape="pill"
       disabled={disabled}
       onMouseDown={onPress}
@@ -28,7 +28,7 @@ export function MicButton({
         recording && "animate-pulse-glow",
       )}
     >
-      <span className="text-xl">{recording ? "🔴" : "🎙"}</span>
+      <span className="text-2xl">{recording ? "🔴" : "🎙"}</span>
       {recording
         ? "Listening… 聞いています"
         : "Press & hold to speak · 押して話す"}

@@ -18,12 +18,12 @@ export function FsoaipCard({ output }: { output: ModelOutput }) {
   const variant = output.highlighted ? "highlighted" : "default";
   return (
     <Card variant={variant} className="flex flex-col gap-0 animate-fade-up">
-      <header className="flex items-start justify-between mb-3 pb-3 border-b border-border">
+      <header className="flex items-start justify-between mb-4 pb-4 border-b border-border">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">
+          <h3 className="text-xl font-semibold text-foreground">
             {output.label.en}
           </h3>
-          <p className="text-xs text-foreground-muted">{output.label.ja}</p>
+          <p className="text-base text-foreground-muted">{output.label.ja}</p>
         </div>
         <Badge tone={output.complete ? "success" : "accent"}>
           {output.complete ? "complete" : "streaming"}
@@ -31,7 +31,7 @@ export function FsoaipCard({ output }: { output: ModelOutput }) {
       </header>
 
       {output.highRiskMatches.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-4">
           {output.highRiskMatches
             .filter((m) => m.matched)
             .map((m) => (

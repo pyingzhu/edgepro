@@ -20,14 +20,14 @@ export function FieldRow({
 }) {
   const label = FIELD_LABELS[field];
   return (
-    <div className="py-3 border-b border-border-subtle last:border-b-0">
+    <div className="py-4 border-b border-border-subtle last:border-b-0">
       <div className="flex items-baseline gap-2 mb-1">
-        <span className="text-2xs uppercase tracking-[0.14em] font-medium text-foreground-muted">
+        <span className="text-sm uppercase tracking-[0.16em] font-medium text-foreground-muted">
           {label.en}
         </span>
-        <span className="text-xs text-foreground-subtle">{label.ja}</span>
+        <span className="text-base text-foreground-subtle">{label.ja}</span>
       </div>
-      <div className="text-sm leading-relaxed min-h-[1.5rem] text-foreground">
+      <div className="text-lg leading-relaxed min-h-[1.75rem] text-foreground">
         {value || <span className="text-foreground-subtle">—</span>}
         {streaming && value && (
           <span className="inline-block w-1.5 h-4 ml-1 align-middle bg-energy animate-pulse-glow" />
