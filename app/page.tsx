@@ -69,6 +69,7 @@ export default function Page() {
               recording={mic.recording}
               permission={mic.permission}
               disabled={state.phase === "streaming"}
+              hasPriorSession={state.cards.some((c) => c.complete)}
               onPress={press}
               onRelease={release}
               onEnable={enable}

@@ -7,6 +7,7 @@ type Props = {
   recording: boolean;
   permission: MicPermission;
   disabled?: boolean;
+  hasPriorSession?: boolean;
   onPress: () => void;
   onRelease: () => void;
   onEnable: () => void;
@@ -16,6 +17,7 @@ export function MicButton({
   recording,
   permission,
   disabled,
+  hasPriorSession,
   onPress,
   onRelease,
   onEnable,
@@ -62,7 +64,9 @@ export function MicButton({
       <span className="text-2xl">{recording ? "🔴" : "🎙"}</span>
       {recording
         ? "Listening… 聞いています"
-        : "Press & hold to speak · 押して話す"}
+        : hasPriorSession
+          ? "Press & hold for next entry · 次の申し送り"
+          : "Press & hold to speak · 押して話す"}
     </Button>
   );
 }
