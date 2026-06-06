@@ -2,17 +2,17 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task.
 
-**Goal:** Ship a polished single-page Next.js frontend at `fully-booked/apps/edgepro/` that captures mic audio, streams it over WebSocket to a local LFM2-Audio inference server, and renders F-SOAIP care card(s) in real time — in time for the Hack the Liquid WAY demo session on 2026-06-07 at 14:00 JST.
+**Goal:** Ship a polished single-page Next.js frontend at `./` that captures mic audio, streams it over WebSocket to a local LFM2-Audio inference server, and renders F-SOAIP care card(s) in real time — in time for the Hack the Liquid WAY demo session on 2026-06-07 at 14:00 JST.
 
-**Architecture:** Single route `/`. Two stacked zones (hero + workspace). One stateful hook (`use-edgepro-session`) owns the WS connection and reducer; everything else is presentational. Liquid Dark palette as Tailwind v4 `@theme` tokens in `globals.css`. F-SOAIP type contract mirrored from `apps/rensei/lib/fsoaip/types.ts`. Test infra: vitest + @testing-library/react + jsdom.
+**Architecture:** Single route `/`. Two stacked zones (hero + workspace). One stateful hook (`use-edgepro-session`) owns the WS connection and reducer; everything else is presentational. Liquid Dark palette as Tailwind v4 `@theme` tokens in `globals.css`. F-SOAIP type contract mirrored from `the F-SOAIP TypeScript contract`. Test infra: vitest + @testing-library/react + jsdom.
 
 **Tech Stack:** Next.js 15.5 (App Router) · React 18 · TypeScript · Tailwind v4 · shadcn/ui v4 · Radix UI primitives · Zod · Framer Motion · clsx · tailwind-merge · vitest · @testing-library/react · jsdom · pnpm workspaces · turbo.
 
-**Design reference:** `apps/edgepro/docs/2026-06-06-edgepro-frontend-design.md` (companion file).
+**Design reference:** `./docs/2026-06-06-edgepro-frontend-design.md` (companion file).
 
 **Source branches to pull from:**
-- F-SOAIP types: `origin/schang/fur-166-fsoaip-demo` → `apps/rensei/lib/fsoaip/types.ts`
-- Rensei stack pattern: `origin/schang/fur-156-blossom-design-language` → `apps/rensei/package.json`, `app/globals.css`, `next.config.js`, `postcss.config.js`, `tsconfig.json`, `vitest.config.ts`
+- F-SOAIP types: `the F-SOAIP contract branch` → `the F-SOAIP TypeScript contract`
+- Rensei stack pattern: `the design-language branch` → `the parent app package.json`, `app/globals.css`, `next.config.js`, `postcss.config.js`, `tsconfig.json`, `vitest.config.ts`
 
 ---
 
@@ -46,18 +46,18 @@ After each milestone marked "PAUSE: YES" — user signs off before next mileston
 ### Task 0.1: Create app directory structure
 
 **Files:**
-- Create: `apps/edgepro/package.json`
-- Create: `apps/edgepro/tsconfig.json`
-- Create: `apps/edgepro/next.config.js`
-- Create: `apps/edgepro/postcss.config.js`
-- Create: `apps/edgepro/.gitignore`
-- Create: `apps/edgepro/components.json`
+- Create: `./package.json`
+- Create: `./tsconfig.json`
+- Create: `./next.config.js`
+- Create: `./postcss.config.js`
+- Create: `./.gitignore`
+- Create: `./components.json`
 
-**Step 1: Write `apps/edgepro/package.json`**
+**Step 1: Write `./package.json`**
 
 ```json
 {
-  "name": "@fully-booked/edgepro",
+  "name": "edgepro",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -109,7 +109,7 @@ After each milestone marked "PAUSE: YES" — user signs off before next mileston
 }
 ```
 
-**Step 2: Write `apps/edgepro/tsconfig.json`**
+**Step 2: Write `./tsconfig.json`**
 
 ```json
 {
@@ -136,7 +136,7 @@ After each milestone marked "PAUSE: YES" — user signs off before next mileston
 }
 ```
 
-**Step 3: Write `apps/edgepro/next.config.js`**
+**Step 3: Write `./next.config.js`**
 
 ```js
 /** @type {import('next').NextConfig} */
@@ -151,7 +151,7 @@ const nextConfig = {
 module.exports = nextConfig
 ```
 
-**Step 4: Write `apps/edgepro/postcss.config.js`**
+**Step 4: Write `./postcss.config.js`**
 
 ```js
 module.exports = {
@@ -161,7 +161,7 @@ module.exports = {
 }
 ```
 
-**Step 5: Write `apps/edgepro/.gitignore`**
+**Step 5: Write `./.gitignore`**
 
 ```
 .next
@@ -172,7 +172,7 @@ next-env.d.ts
 coverage
 ```
 
-**Step 6: Write `apps/edgepro/components.json`** (shadcn config; defines accent for any future shadcn add commands)
+**Step 6: Write `./components.json`** (shadcn config; defines accent for any future shadcn add commands)
 
 ```json
 {
@@ -200,11 +200,11 @@ coverage
 **Step 7: Commit**
 
 ```bash
-cd /Users/peiying/fully-booked
+cd .
 git checkout -b feat/edgepro-frontend
-git add apps/edgepro/package.json apps/edgepro/tsconfig.json \
-        apps/edgepro/next.config.js apps/edgepro/postcss.config.js \
-        apps/edgepro/.gitignore apps/edgepro/components.json
+git add ./package.json ./tsconfig.json \
+        ./next.config.js ./postcss.config.js \
+        ./.gitignore ./components.json
 git commit -m "chore(edgepro): scaffold app config files"
 ```
 
@@ -215,7 +215,7 @@ git commit -m "chore(edgepro): scaffold app config files"
 **Step 1: Install via pnpm from monorepo root**
 
 ```bash
-cd /Users/peiying/fully-booked
+cd .
 pnpm install
 ```
 
@@ -224,7 +224,7 @@ Expected: pnpm resolves the new workspace, downloads deps. ~30–60s.
 **Step 2: Verify**
 
 ```bash
-ls apps/edgepro/node_modules/next/package.json
+ls ./node_modules/next/package.json
 ```
 
 Expected: file exists.
@@ -232,8 +232,8 @@ Expected: file exists.
 **Step 3: Sanity check Next**
 
 ```bash
-cd /Users/peiying/fully-booked
-pnpm --filter @fully-booked/edgepro exec next --version
+cd .
+pnpm --filter edgepro exec next --version
 ```
 
 Expected: prints `Next.js 15.5.x`.
@@ -245,7 +245,7 @@ Expected: prints `Next.js 15.5.x`.
 ### Task 0.3: Write Liquid Dark `globals.css`
 
 **Files:**
-- Create: `apps/edgepro/app/globals.css`
+- Create: `./app/globals.css`
 
 **Step 1: Write the file**
 
@@ -258,7 +258,7 @@ Expected: prints `Next.js 15.5.x`.
  * Tailwind v4 @theme tokens. No tailwind.config.ts.
  * Deep ink background + Liquid water-blue accent. Bilingual JA/EN type stack.
  *
- * Reference: apps/edgepro/docs/2026-06-06-edgepro-frontend-design.md
+ * Reference: ./docs/2026-06-06-edgepro-frontend-design.md
  */
 
 @theme {
@@ -380,7 +380,7 @@ html, body {
 **Step 2: Commit**
 
 ```bash
-git add apps/edgepro/app/globals.css
+git add ./app/globals.css
 git commit -m "feat(edgepro): liquid dark theme tokens (globals.css)"
 ```
 
@@ -389,7 +389,7 @@ git commit -m "feat(edgepro): liquid dark theme tokens (globals.css)"
 ### Task 0.4: Write `app/layout.tsx` with fonts
 
 **Files:**
-- Create: `apps/edgepro/app/layout.tsx`
+- Create: `./app/layout.tsx`
 
 **Step 1: Write the file**
 
@@ -445,7 +445,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 **Step 2: Commit**
 
 ```bash
-git add apps/edgepro/app/layout.tsx
+git add ./app/layout.tsx
 git commit -m "feat(edgepro): root layout with bilingual font stack"
 ```
 
@@ -454,7 +454,7 @@ git commit -m "feat(edgepro): root layout with bilingual font stack"
 ### Task 0.5: Write placeholder `app/page.tsx`
 
 **Files:**
-- Create: `apps/edgepro/app/page.tsx`
+- Create: `./app/page.tsx`
 
 **Step 1: Write the file**
 
@@ -490,7 +490,7 @@ export default function Page() {
 **Step 2: Commit**
 
 ```bash
-git add apps/edgepro/app/page.tsx
+git add ./app/page.tsx
 git commit -m "feat(edgepro): placeholder page"
 ```
 
@@ -501,8 +501,8 @@ git commit -m "feat(edgepro): placeholder page"
 **Step 1: Start dev server**
 
 ```bash
-cd /Users/peiying/fully-booked
-pnpm --filter @fully-booked/edgepro dev
+cd .
+pnpm --filter edgepro dev
 ```
 
 Expected: `▲ Next.js 15.5.x ✓ Ready in ...` and URL `http://localhost:3007`.
@@ -527,8 +527,8 @@ Expected: `▲ Next.js 15.5.x ✓ Ready in ...` and URL `http://localhost:3007`.
 **Step 1: Find the SHA**
 
 ```bash
-cd /Users/peiying/fully-booked
-git log origin/schang/fur-166-fsoaip-demo -- apps/rensei/lib/fsoaip/types.ts \
+cd .
+git log the F-SOAIP contract branch -- the F-SOAIP TypeScript contract \
   --format='%H %s' | head -1
 ```
 
@@ -537,22 +537,22 @@ Record the SHA — paste it into the file header in Step 2.
 **Step 2: Extract types.ts and copy with pinned header**
 
 **Files:**
-- Create: `apps/edgepro/lib/fsoaip/types.ts`
+- Create: `./lib/fsoaip/types.ts`
 
 ```bash
-mkdir -p apps/edgepro/lib/fsoaip
-git show origin/schang/fur-166-fsoaip-demo:apps/rensei/lib/fsoaip/types.ts \
-  > apps/edgepro/lib/fsoaip/types.ts
+mkdir -p ./lib/fsoaip
+git show the F-SOAIP contract branch:the F-SOAIP TypeScript contract \
+  > ./lib/fsoaip/types.ts
 ```
 
 **Step 3: Prepend a header noting the source SHA**
 
-Edit `apps/edgepro/lib/fsoaip/types.ts`. Add ABOVE the existing top comment:
+Edit `./lib/fsoaip/types.ts`. Add ABOVE the existing top comment:
 
 ```ts
 // ---------------------------------------------------------------------------
-// Mirrored from apps/rensei/lib/fsoaip/types.ts
-//   branch: schang/fur-166-fsoaip-demo
+// Mirrored from the F-SOAIP TypeScript contract
+//   branch: the F-SOAIP contract branch
 //   sha:    <PASTE_SHA_FROM_STEP_1>
 //   date:   2026-06-06
 // Do NOT edit here without updating the source in rensei and re-pulling.
@@ -563,7 +563,7 @@ Edit `apps/edgepro/lib/fsoaip/types.ts`. Add ABOVE the existing top comment:
 **Step 4: Commit**
 
 ```bash
-git add apps/edgepro/lib/fsoaip/types.ts
+git add ./lib/fsoaip/types.ts
 git commit -m "feat(edgepro): mirror F-SOAIP types from rensei (fur-166)"
 ```
 
@@ -572,7 +572,7 @@ git commit -m "feat(edgepro): mirror F-SOAIP types from rensei (fur-166)"
 ### Task 1.2: Set up vitest
 
 **Files:**
-- Create: `apps/edgepro/vitest.config.ts`
+- Create: `./vitest.config.ts`
 
 **Step 1: Write the config**
 
@@ -598,7 +598,7 @@ export default defineConfig({
 **Step 2: Create test setup file**
 
 **Files:**
-- Create: `apps/edgepro/tests/setup.ts`
+- Create: `./tests/setup.ts`
 
 ```ts
 import '@testing-library/jest-dom/vitest'
@@ -607,12 +607,12 @@ import '@testing-library/jest-dom/vitest'
 **Step 3: Smoke-test vitest boots**
 
 ```bash
-mkdir -p apps/edgepro/tests/unit
-cat > apps/edgepro/tests/unit/_sanity.test.ts <<'EOF'
+mkdir -p ./tests/unit
+cat > ./tests/unit/_sanity.test.ts <<'EOF'
 import { describe, it, expect } from 'vitest'
 describe('sanity', () => { it('runs', () => { expect(1 + 1).toBe(2) }) })
 EOF
-pnpm --filter @fully-booked/edgepro test
+pnpm --filter edgepro test
 ```
 
 Expected: vitest runs, 1 passed.
@@ -620,8 +620,8 @@ Expected: vitest runs, 1 passed.
 **Step 4: Delete sanity test, commit setup**
 
 ```bash
-rm apps/edgepro/tests/unit/_sanity.test.ts
-git add apps/edgepro/vitest.config.ts apps/edgepro/tests/setup.ts
+rm ./tests/unit/_sanity.test.ts
+git add ./vitest.config.ts ./tests/setup.ts
 git commit -m "test(edgepro): vitest + testing-library + jsdom setup"
 ```
 
@@ -630,13 +630,13 @@ git commit -m "test(edgepro): vitest + testing-library + jsdom setup"
 ### Task 1.3: WS protocol Zod schemas — TDD
 
 **Files:**
-- Create: `apps/edgepro/lib/ws/protocol.ts`
-- Create: `apps/edgepro/tests/unit/ws-protocol.test.ts`
+- Create: `./lib/ws/protocol.ts`
+- Create: `./tests/unit/ws-protocol.test.ts`
 
 **Step 1: Write the failing test**
 
 ```ts
-// apps/edgepro/tests/unit/ws-protocol.test.ts
+// ./tests/unit/ws-protocol.test.ts
 import { describe, it, expect } from 'vitest'
 import { parseServerMsg } from '@/lib/ws/protocol'
 
@@ -676,7 +676,7 @@ describe('parseServerMsg', () => {
 **Step 2: Run test — expect FAIL**
 
 ```bash
-pnpm --filter @fully-booked/edgepro test
+pnpm --filter edgepro test
 ```
 
 Expected: FAIL — module not found.
@@ -684,7 +684,7 @@ Expected: FAIL — module not found.
 **Step 3: Write the implementation**
 
 ```ts
-// apps/edgepro/lib/ws/protocol.ts
+// ./lib/ws/protocol.ts
 import { z } from 'zod'
 import type { FsoaipNote, FsoaipField, FactItem } from '@/lib/fsoaip/types'
 
@@ -759,7 +759,7 @@ export function encodeClientMsg(msg: ClientMsg): string | ArrayBuffer {
 **Step 4: Run test — expect PASS**
 
 ```bash
-pnpm --filter @fully-booked/edgepro test
+pnpm --filter edgepro test
 ```
 
 Expected: 4 passed.
@@ -767,7 +767,7 @@ Expected: 4 passed.
 **Step 5: Commit**
 
 ```bash
-git add apps/edgepro/lib/ws/protocol.ts apps/edgepro/tests/unit/ws-protocol.test.ts
+git add ./lib/ws/protocol.ts ./tests/unit/ws-protocol.test.ts
 git commit -m "feat(edgepro): WS protocol Zod schemas + tests"
 ```
 
@@ -780,7 +780,7 @@ git commit -m "feat(edgepro): WS protocol Zod schemas + tests"
 ### Task 2.1: Define `ModelOutput` and initial state
 
 **Files:**
-- Create: `apps/edgepro/lib/session/types.ts`
+- Create: `./lib/session/types.ts`
 
 ```ts
 import type { FsoaipNote, FactItem } from '@/lib/fsoaip/types'
@@ -815,7 +815,7 @@ export const initialSessionState: SessionState = {
 ### Task 2.2: Reducer test — transcript & start
 
 **Files:**
-- Create: `apps/edgepro/tests/unit/session-reducer.test.ts`
+- Create: `./tests/unit/session-reducer.test.ts`
 
 **Step 1: Write failing tests**
 
@@ -868,12 +868,12 @@ describe('sessionReducer', () => {
 })
 ```
 
-**Step 2: Run — expect FAIL** (`pnpm --filter @fully-booked/edgepro test`).
+**Step 2: Run — expect FAIL** (`pnpm --filter edgepro test`).
 
 **Step 3: Implement minimum to pass**
 
 **Files:**
-- Create: `apps/edgepro/lib/session/reducer.ts`
+- Create: `./lib/session/reducer.ts`
 
 ```ts
 import type { ServerMsg } from '@/lib/ws/protocol'
@@ -1073,7 +1073,7 @@ case 'error':
 **Step 5: Commit Milestone 2**
 
 ```bash
-git add apps/edgepro/lib/session/ apps/edgepro/tests/unit/session-reducer.test.ts
+git add ./lib/session/ ./tests/unit/session-reducer.test.ts
 git commit -m "feat(edgepro): session reducer + tests (start, transcript, fsoaip, facts, error)"
 ```
 
@@ -1086,7 +1086,7 @@ git commit -m "feat(edgepro): session reducer + tests (start, transcript, fsoaip
 ### Task 3.1: `use-online` hook
 
 **Files:**
-- Create: `apps/edgepro/hooks/use-online.ts`
+- Create: `./hooks/use-online.ts`
 
 ```ts
 'use client'
@@ -1117,13 +1117,13 @@ Commit at end of Milestone 3.
 ### Task 3.2: `use-mic-capture` hook
 
 **Files:**
-- Create: `apps/edgepro/hooks/use-mic-capture.ts`
-- Create: `apps/edgepro/public/worklets/pcm-worklet.js`
+- Create: `./hooks/use-mic-capture.ts`
+- Create: `./public/worklets/pcm-worklet.js`
 
 **Step 1: Write the AudioWorklet processor**
 
 ```js
-// apps/edgepro/public/worklets/pcm-worklet.js
+// ./public/worklets/pcm-worklet.js
 class PCMWorklet extends AudioWorkletProcessor {
   process(inputs) {
     const input = inputs[0]
@@ -1144,7 +1144,7 @@ registerProcessor('pcm-worklet', PCMWorklet)
 **Step 2: Write the hook**
 
 ```ts
-// apps/edgepro/hooks/use-mic-capture.ts
+// ./hooks/use-mic-capture.ts
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -1202,7 +1202,7 @@ Commit at end of Milestone 3.
 ### Task 3.3: `use-edgepro-session` hook
 
 **Files:**
-- Create: `apps/edgepro/hooks/use-edgepro-session.ts`
+- Create: `./hooks/use-edgepro-session.ts`
 
 ```ts
 'use client'
@@ -1291,7 +1291,7 @@ export function useEdgeproSession({
 **Step 1: Commit Milestone 3**
 
 ```bash
-git add apps/edgepro/hooks/ apps/edgepro/public/worklets/
+git add ./hooks/ ./public/worklets/
 git commit -m "feat(edgepro): session, mic, and online hooks"
 ```
 
@@ -1304,7 +1304,7 @@ git commit -m "feat(edgepro): session, mic, and online hooks"
 ### Task 4.1: `lib/utils.ts` with `cn()`
 
 ```ts
-// apps/edgepro/lib/utils.ts
+// ./lib/utils.ts
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -1316,7 +1316,7 @@ export function cn(...inputs: ClassValue[]) {
 ### Task 4.2: Button primitive
 
 ```tsx
-// apps/edgepro/components/primitives/button.tsx
+// ./components/primitives/button.tsx
 'use client'
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
@@ -1374,7 +1374,7 @@ Button.displayName = 'Button'
 ### Task 4.3: Badge primitive
 
 ```tsx
-// apps/edgepro/components/primitives/badge.tsx
+// ./components/primitives/badge.tsx
 import { cn } from '@/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
 
@@ -1406,7 +1406,7 @@ export function Badge({ tone, className, ...props }: BadgeProps) {
 ### Task 4.4: Card primitive
 
 ```tsx
-// apps/edgepro/components/primitives/card.tsx
+// ./components/primitives/card.tsx
 import { cn } from '@/lib/utils'
 
 export function Card({
@@ -1435,7 +1435,7 @@ export function Card({
 **Step: Commit Milestone 4**
 
 ```bash
-git add apps/edgepro/lib/utils.ts apps/edgepro/components/primitives/
+git add ./lib/utils.ts ./components/primitives/
 git commit -m "feat(edgepro): primitives (Button, Badge, Card) + cn util"
 ```
 
@@ -1448,11 +1448,11 @@ git commit -m "feat(edgepro): primitives (Button, Badge, Card) + cn util"
 ### Task 5.1: `<AirGapPill />` + test
 
 **Files:**
-- Create: `apps/edgepro/components/hero/air-gap-pill.tsx`
-- Create: `apps/edgepro/tests/unit/air-gap-pill.test.tsx`
+- Create: `./components/hero/air-gap-pill.tsx`
+- Create: `./tests/unit/air-gap-pill.test.tsx`
 
 ```tsx
-// apps/edgepro/components/hero/air-gap-pill.tsx
+// ./components/hero/air-gap-pill.tsx
 'use client'
 import { useOnline } from '@/hooks/use-online'
 import { Badge } from '@/components/primitives/badge'
@@ -1477,7 +1477,7 @@ export function AirGapPill() {
 ```
 
 ```tsx
-// apps/edgepro/tests/unit/air-gap-pill.test.tsx
+// ./tests/unit/air-gap-pill.test.tsx
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { AirGapPill } from '@/components/hero/air-gap-pill'
@@ -1499,12 +1499,12 @@ describe('AirGapPill', () => {
 })
 ```
 
-Run: `pnpm --filter @fully-booked/edgepro test` — expect PASS.
+Run: `pnpm --filter edgepro test` — expect PASS.
 
 ### Task 5.2: `<Hero />`
 
 ```tsx
-// apps/edgepro/components/hero/hero.tsx
+// ./components/hero/hero.tsx
 import { ReactNode } from 'react'
 import { AirGapPill } from './air-gap-pill'
 
@@ -1551,7 +1551,7 @@ export function Hero({ cta }: { cta?: ReactNode }) {
 
 ### Task 5.3: Render hero on page
 
-Replace `apps/edgepro/app/page.tsx`:
+Replace `./app/page.tsx`:
 
 ```tsx
 import { Hero } from '@/components/hero/hero'
@@ -1577,8 +1577,8 @@ export default function Page() {
 **Commit Milestone 5**
 
 ```bash
-git add apps/edgepro/components/hero/ apps/edgepro/tests/unit/air-gap-pill.test.tsx \
-        apps/edgepro/app/page.tsx
+git add ./components/hero/ ./tests/unit/air-gap-pill.test.tsx \
+        ./app/page.tsx
 git commit -m "feat(edgepro): hero zone with air-gap pill + bilingual headline"
 ```
 
@@ -1591,7 +1591,7 @@ git commit -m "feat(edgepro): hero zone with air-gap pill + bilingual headline"
 ### Task 6.1: `<FieldRow />`
 
 ```tsx
-// apps/edgepro/components/workspace/field-row.tsx
+// ./components/workspace/field-row.tsx
 import type { FsoaipField } from '@/lib/fsoaip/types'
 
 const FIELD_LABELS: Record<FsoaipField, { en: string; ja: string }> = {
@@ -1646,7 +1646,7 @@ export function FieldRow({
 ### Task 6.2: `<HighRiskChip />`
 
 ```tsx
-// apps/edgepro/components/workspace/high-risk-chip.tsx
+// ./components/workspace/high-risk-chip.tsx
 import type { FactItem } from '@/lib/fsoaip/types'
 import { Badge } from '@/components/primitives/badge'
 
@@ -1678,7 +1678,7 @@ export function HighRiskChip({ fact }: { fact: FactItem }) {
 ### Task 6.3: `<FsoaipCard />`
 
 ```tsx
-// apps/edgepro/components/workspace/fsoaip-card.tsx
+// ./components/workspace/fsoaip-card.tsx
 import type { ModelOutput } from '@/lib/session/types'
 import type { FsoaipField } from '@/lib/fsoaip/types'
 import { Card } from '@/components/primitives/card'
@@ -1738,7 +1738,7 @@ export function FsoaipCard({ output }: { output: ModelOutput }) {
 ### Task 6.4: `<FsoaipCardGrid />`
 
 ```tsx
-// apps/edgepro/components/workspace/fsoaip-card-grid.tsx
+// ./components/workspace/fsoaip-card-grid.tsx
 import type { ModelOutput } from '@/lib/session/types'
 import { FsoaipCard } from './fsoaip-card'
 
@@ -1762,7 +1762,7 @@ export function FsoaipCardGrid({ cards }: { cards: ModelOutput[] }) {
 ### Task 6.5: `<TranscriptBubble />`
 
 ```tsx
-// apps/edgepro/components/workspace/transcript-bubble.tsx
+// ./components/workspace/transcript-bubble.tsx
 export function TranscriptBubble({ text }: { text: string }) {
   return (
     <div className="rounded-[var(--radius-card)] p-4 mb-6 border border-[var(--color-border-subtle)] bg-[var(--color-surface)] min-h-[60px]">
@@ -1786,7 +1786,7 @@ export function TranscriptBubble({ text }: { text: string }) {
 ### Task 6.6: `<Waveform />`
 
 ```tsx
-// apps/edgepro/components/mic/waveform.tsx
+// ./components/mic/waveform.tsx
 'use client'
 import { useEffect, useRef } from 'react'
 
@@ -1837,7 +1837,7 @@ export function Waveform({ active }: { active: boolean }) {
 ### Task 6.7: `<MicButton />`
 
 ```tsx
-// apps/edgepro/components/mic/mic-button.tsx
+// ./components/mic/mic-button.tsx
 'use client'
 import { Button } from '@/components/primitives/button'
 import { cn } from '@/lib/utils'
@@ -1880,7 +1880,7 @@ export function MicButton({
 Type uses plain numbers (no function-typed `format` — would break JSON-fixture import). Always renders 2-decimal fixed.
 
 ```tsx
-// apps/edgepro/components/workspace/stats-strip.tsx
+// ./components/workspace/stats-strip.tsx
 export type Metric = { label: { en: string; ja: string }; base: number; tuned: number }
 
 export function StatsStrip({ metrics }: { metrics: Metric[] }) {
@@ -1923,7 +1923,7 @@ export function StatsStrip({ metrics }: { metrics: Metric[] }) {
 ### Task 6.9: W&B metrics fixture
 
 **Files:**
-- Create: `apps/edgepro/data/fixtures/wandb-metrics.json`
+- Create: `./data/fixtures/wandb-metrics.json`
 
 ```json
 [
@@ -1939,8 +1939,8 @@ Placeholder values pending real W&B export from the fine-tune run. Swap this fil
 **Commit Milestone 6**
 
 ```bash
-git add apps/edgepro/components/workspace/ apps/edgepro/components/mic/ \
-        apps/edgepro/data/fixtures/wandb-metrics.json
+git add ./components/workspace/ ./components/mic/ \
+        ./data/fixtures/wandb-metrics.json
 git commit -m "feat(edgepro): workspace + mic components + W&B metrics fixture"
 ```
 
@@ -1954,7 +1954,7 @@ git commit -m "feat(edgepro): workspace + mic components + W&B metrics fixture"
 
 **Dual-card by default** (base + fine-tuned, side-by-side) — Track 2's "measurable improvement over base" is visible on the live demo surface, not just in slides. **StatsStrip renders by default** with W&B-exported metrics from the fixture.
 
-Replace `apps/edgepro/app/page.tsx`:
+Replace `./app/page.tsx`:
 
 ```tsx
 'use client'
@@ -2036,7 +2036,7 @@ export default function Page() {
 }
 ```
 
-**Note on the JSON import:** Next/Tailwind v4 path alias `@/data/fixtures/...` resolves via the tsconfig `paths` setting. The fixture lives at `apps/edgepro/data/fixtures/wandb-metrics.json` (created in Task 6.9). `resolveJsonModule: true` in tsconfig already permits the import.
+**Note on the JSON import:** Next/Tailwind v4 path alias `@/data/fixtures/...` resolves via the tsconfig `paths` setting. The fixture lives at `./data/fixtures/wandb-metrics.json` (created in Task 6.9). `resolveJsonModule: true` in tsconfig already permits the import.
 
 **StatsStrip gating:** strip only renders once at least one card is `complete`, so it doesn't sit empty during streaming. Pre-stream the workspace looks clean; the metric reveal is part of the "after" beat.
 
@@ -2047,7 +2047,7 @@ Without backend, clicking mic → WS will fail. Expected behavior: hero + wavefo
 ### Task 7.3: Commit
 
 ```bash
-git add apps/edgepro/app/page.tsx
+git add ./app/page.tsx
 git commit -m "feat(edgepro): wire hero + workspace + mic + session on landing page"
 ```
 
@@ -2060,11 +2060,11 @@ git commit -m "feat(edgepro): wire hero + workspace + mic + session on landing p
 ### Task 8.1: Create the mock server
 
 **Files:**
-- Create: `apps/edgepro/scripts/mock-ws-server.ts`
-- Create: `apps/edgepro/data/fixtures/mock-session.json`
+- Create: `./scripts/mock-ws-server.ts`
+- Create: `./data/fixtures/mock-session.json`
 
 ```ts
-// apps/edgepro/scripts/mock-ws-server.ts
+// ./scripts/mock-ws-server.ts
 import { WebSocketServer } from 'ws'
 import fixture from '../data/fixtures/mock-session.json'
 
@@ -2112,7 +2112,7 @@ console.log('[mock] ws://localhost:8000/ws/session')
 Fixture emits events for **both `base` and `edgepro` modelIds** so the dual-card default has real content. Base is intentionally weaker — misses the fall-risk fact, conflates the fever with a generic note, less structured plan — so the "measurable improvement" is visible without any narration.
 
 ```json
-// apps/edgepro/data/fixtures/mock-session.json
+// ./data/fixtures/mock-session.json
 {
   "events": [
     { "delayMs":  100, "msg": { "type": "transcript_partial", "text": "夜中の" } },
@@ -2197,14 +2197,14 @@ Fixture emits events for **both `base` and `edgepro` modelIds** so the dual-card
 
 **Terminal 1:**
 ```bash
-cd /Users/peiying/fully-booked
-pnpm --filter @fully-booked/edgepro mock-server
+cd .
+pnpm --filter edgepro mock-server
 ```
 Expected: `[mock] ws://localhost:8000/ws/session`.
 
 **Terminal 2 (if not already running):**
 ```bash
-pnpm --filter @fully-booked/edgepro dev
+pnpm --filter edgepro dev
 ```
 
 **Browser:** open `http://localhost:3007`. Click & hold the mic button for ~3 seconds, release. Expected:
@@ -2217,7 +2217,7 @@ pnpm --filter @fully-booked/edgepro dev
 **Step: Commit**
 
 ```bash
-git add apps/edgepro/scripts/mock-ws-server.ts apps/edgepro/data/fixtures/mock-session.json
+git add ./scripts/mock-ws-server.ts ./data/fixtures/mock-session.json
 git commit -m "feat(edgepro): mock WS server + fixture for end-to-end smoke"
 ```
 
@@ -2251,15 +2251,15 @@ Drop `public/favicon.svg` (simple droplet on dark) and `public/og.png` (1200×63
 
 ## End-of-build checklist (before 13:30 submission)
 
-- [ ] `pnpm --filter @fully-booked/edgepro type-check` → no errors.
-- [ ] `pnpm --filter @fully-booked/edgepro test` → all pass.
-- [ ] `pnpm --filter @fully-booked/edgepro build` → succeeds.
+- [ ] `pnpm --filter edgepro type-check` → no errors.
+- [ ] `pnpm --filter edgepro test` → all pass.
+- [ ] `pnpm --filter edgepro build` → succeeds.
 - [ ] Manual: full mic → mock-server → card flow works.
 - [ ] Backend URL in `page.tsx` swapped to the real `liquid-audio` server before stage demo.
 - [ ] `.env.local` for any model paths, if needed.
 - [ ] Repo pushed to GitHub; URL in submission deck.
 - [ ] Screenshot for demo assets folder taken.
-- [ ] README at `apps/edgepro/README.md` includes: how to run dev, how to run mock server, how to point at real backend.
+- [ ] README at `./README.md` includes: how to run dev, how to run mock server, how to point at real backend.
 
 ---
 

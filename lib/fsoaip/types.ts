@@ -1,21 +1,15 @@
 // ---------------------------------------------------------------------------
-// Mirrored from apps/rensei/lib/fsoaip/types.ts
-//   branch: schang/fur-166-fsoaip-demo
-//   sha:    efcd0638d696effd7122c5290a07cf921818c9b5
-//   date:   2026-06-06
-// Do NOT edit here without updating the source in rensei and re-pulling.
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
-// F-SOAIP data contract (FUR-166 / FUR-171 hand-off).
-//
-// Shared types for the JA介護 voice → F-SOAIP gold-correction task. The
-// generator (FUR-171) produces target content matching FsoaipTargetContent;
-// Rensei imports these types to render the LEFT annotator panel (audio +
-// transcript + fact checklist + candidate note) and to type-check the seed.
+// F-SOAIP data contract.
 //
 // F-SOAIP = Focus, Subjective, Objective, Assessment, Intervention, Plan —
 // the 6-section nursing/care record format used in Japanese 介護・看護 docs.
+//
+// Shared types for the JA 介護 voice → F-SOAIP structured-note task. One
+// audio clip yields one FsoaipNote (the 6 sections), accompanied by a
+// fact_checklist that drives high-risk highlighting on the rendered card.
+// The error-card taxonomy lives server-side for the eval pipeline only —
+// it is deliberately excluded from FsoaipTargetContent so it never reaches
+// the annotator/demo client.
 //
 // Dependency-free: pure type module, no runtime imports.
 // ---------------------------------------------------------------------------

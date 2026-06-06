@@ -97,7 +97,7 @@ export default function Page() {
           {state.errorMessage && (
             <div className="rounded-card border border-danger bg-danger-muted p-5 mb-8 text-base">
               {state.errorMessage === "WebSocket error"
-                ? "Backend not reachable on ws://localhost:8000/ws/session. Start it with: pnpm --filter @fully-booked/edgepro mock-server"
+                ? "Backend not reachable on ws://localhost:8000/ws/session. Start it with: pnpm mock-server"
                 : state.errorMessage}
             </div>
           )}

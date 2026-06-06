@@ -2,8 +2,8 @@
 
 **Status:** approved — ready for implementation plan
 **Date:** 2026-06-06 (Day 1 of Hack the Liquid WAY hackathon, Tokyo)
-**Linear:** FUR-175 — EdgePro offline LFM2-Audio nursing-handoff copilot (Hackathon Track 2)
-**Parent:** FUR-167 — Platform: Rensei → human-validated data & eval service for AI labs
+**Linear:** this project — EdgePro offline LFM2-Audio nursing-handoff copilot (Hackathon Track 2)
+**Parent:** the parent platform — Platform: Rensei → human-validated data & eval service for AI labs
 **Scope:** frontend only. Demo strategy (what's shown on stage, in what order) is a separate brainstorm.
 
 ## Context
@@ -25,10 +25,10 @@ The fine-tune + eval + offline runtime are out of scope for this document. This 
 
 | # | Decision | Rationale |
 |---|---|---|
-| 1 | **Tech stack:** Next.js 15.5 (App Router) + React 18 + Tailwind v4 + shadcn/ui v4 + Radix UI primitives + Zod + clsx + tailwind-merge. Tests: vitest + @testing-library/react + jsdom. No next-intl (single page; bilingual via inline strings), no auth, no Drizzle, no TanStack Query. | Matches `apps/rensei` `package.json` on `origin/schang/fur-156-blossom-design-language`. Air-gapped same-machine means no REST/auth/i18n routing layers needed. |
-| 2 | **Location:** `fully-booked/apps/edgepro/` inside the existing pnpm/turbo monorepo. | Matches user's monorepo conventions. |
+| 1 | **Tech stack:** Next.js 15.5 (App Router) + React 18 + Tailwind v4 + shadcn/ui v4 + Radix UI primitives + Zod + clsx + tailwind-merge. Tests: vitest + @testing-library/react + jsdom. No next-intl (single page; bilingual via inline strings), no auth, no Drizzle, no TanStack Query. | Matches `the parent app` `package.json` on `the design-language branch`. Air-gapped same-machine means no REST/auth/i18n routing layers needed. |
+| 2 | **Location:** `./` inside the existing pnpm/turbo monorepo. | Matches user's monorepo conventions. |
 | 3 | **Design system: "Liquid Dark"** — bespoke EdgePro palette structured on rensei's Tailwind v4 `@theme` pattern in `app/globals.css`. Deep-ink BG + Liquid water-blue accent. NOT lifted from rensei colors. | Rensei is light-mode "Kinari/Warm Studio" (eggshell, sumi ink, refined indigo) — clashes with on-stage projector reality and doesn't say "Liquid AI product." Liquid Dark says "built on Liquid AI" without copying their brand. Detail in "Visual system" section below. |
-| 4 | **F-SOAIP schema:** mirrors `apps/rensei/lib/fsoaip/types.ts` on `origin/schang/fur-166-fsoaip-demo`. `error_cards` strictly excluded from frontend payload (contract invariant). | Schema is already locked across the platform; the demo must conform, not invent. |
+| 4 | **F-SOAIP schema:** mirrors `the F-SOAIP TypeScript contract` on `the F-SOAIP contract branch`. `error_cards` strictly excluded from frontend payload (contract invariant). | Schema is already locked across the platform; the demo must conform, not invent. |
 | 5 | **Transport:** WebSocket on `ws://localhost:8000/ws/session`. Browser sends 16-bit PCM frames; server streams JSON events back. Latency tolerated. | User locked streaming (b) with delay accepted. Same-machine air-gapped — no TLS, no auth. |
 | 6 | **Bilingual:** JA-first content (transcript, F-SOAIP body), EN sub-labels on structural chrome (`Focus / フォーカス` style). Hero has one mincho/serif JA poetic moment (`申し送り`). | Stage demo is primarily JA but judges include EN speakers. Single mincho moment honors the "one poetic moment per surface" convention from the rensei Blossom design system without copying its color palette. |
 | 7 | **Single page, single route `/`.** No marketing site, no `/demo` split, no `/about`. | 24h timeline. One polished surface > two half-baked ones. |
@@ -184,8 +184,8 @@ type ServerMsg =
 ## File layout
 
 ```
-apps/edgepro/
-  package.json                — name: "@fully-booked/edgepro" (or "edgepro"); deps mirror rensei minus auth/intl/drizzle
+./
+  package.json                — name: "edgepro" (or "edgepro"); deps mirror rensei minus auth/intl/drizzle
   next.config.js              — minimal: reactStrictMode, output: 'standalone', outputFileTracingRoot
   postcss.config.js           — @tailwindcss/postcss only
   tsconfig.json               — copied from rensei pattern
@@ -202,7 +202,7 @@ apps/edgepro/
     use-online.ts             — navigator.onLine watcher
   lib/
     fsoaip/
-      types.ts                — copied verbatim from apps/rensei/lib/fsoaip/types.ts (SHA pinned, branch: fur-166-fsoaip-demo)
+      types.ts                — copied verbatim from the F-SOAIP TypeScript contract (SHA pinned, branch: fur-166-fsoaip-demo)
     ws/
       protocol.ts             — ClientMsg / ServerMsg Zod schemas + types
     utils.ts                  — cn() helper (clsx + tailwind-merge)
@@ -242,19 +242,19 @@ These are intentionally not blockers — the components are built to support bot
 | Live mic permissions on the AMD demo box may not be pre-granted. | Test on the assigned PC during Day 1 setup window. Build a clear "Click to enable microphone" idle state in `<MicButton>`. |
 | JA-aware grapheme splitting on the backend not implemented. | Flag explicitly to backend team (this doc). Worst case: render with `font-feature-settings: "calt"` and tolerate a flash of `�`. |
 | Liquid hex `#3FB8E5` is a best-read approximation — `liquid.ai` is JS-rendered and WebFetch couldn't extract the exact brand hex. | Easy to swap if a Liquid brand kit lands — palette is one CSS variable in `globals.css`. Reference: PDF event guide page 1 droplet emoji is standard `💧` (not a custom color). |
-| `apps/rensei/lib/fsoaip/types.ts` may evolve on `fur-166-fsoaip-demo` before merge. | Pin to the commit SHA at copy time. Document the SHA in the copied file header. |
+| `the F-SOAIP TypeScript contract` may evolve on the F-SOAIP contract branch before merge. | Pin to the commit SHA at copy time. Document the SHA in the copied file header. |
 | Rensei `globals.css` uses Tailwind v4 `@theme` block but also has a legacy `tailwind.config.ts` (v3-style with dark tokens) — confusion about which is active. | EdgePro uses ONLY the v4 `@theme` pattern. No `tailwind.config.ts` file. Avoid the ambiguity. |
 
 ## References
 
-- **Linear:** [FUR-175](https://linear.app/blossomai/issue/FUR-175/edgepro-offline-lfm2-audio-nursing-handoff-copilot-hackathon-track-2)
+- Project context: internal Linear ticket (omitted from public copy)
 - **Hackathon guide:** Hack the Liquid WAY event guide (Notion, exported as PDF 2026-06-06)
-- **F-SOAIP schema source:** `apps/rensei/lib/fsoaip/types.ts` on `origin/schang/fur-166-fsoaip-demo`
-- **Design tokens source:** `apps/rensei/tailwind.config.ts` on `origin/schang/fur-156-blossom-design-language`
+- **F-SOAIP schema source:** `the F-SOAIP TypeScript contract` on `the F-SOAIP contract branch`
+- **Design tokens source:** `the design-system Tailwind config` on `the design-language branch`
 - **Related branches:**
-  - `origin/schang/fur-158-rensei-landing` (Rensei landing page reference)
-  - `origin/schang/fur-166-fsoaip-demo` (F-SOAIP types + Zod contract + JSON schema)
-  - `origin/schang/fur-156-blossom-design-language` (Tailwind tokens)
-  - `origin/feat/rensei-platform` (broader Rensei app reference)
+  - `the landing reference branch` (Rensei landing page reference)
+  - `the F-SOAIP contract branch` (F-SOAIP types + Zod contract + JSON schema)
+  - `the design-language branch` (Tailwind tokens)
+  - `the platform branch` (broader Rensei app reference)
 - **Liquid first-party trainer (out of scope, referenced):** `liquid-audio` Python package (`LFM2AudioChatMapper → LFM2DataLoader → train.py`)
 - **Base model:** `LiquidAI/LFM2.5-Audio-1.5B-JP` (HuggingFace)
