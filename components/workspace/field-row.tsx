@@ -21,16 +21,16 @@ export function FieldRow({
   const label = FIELD_LABELS[field];
   return (
     <div className="py-4 border-b border-border-subtle last:border-b-0">
-      <div className="flex items-baseline gap-2 mb-1">
-        <span className="text-sm uppercase tracking-[0.16em] font-medium text-foreground-muted">
+      <div className="flex items-baseline gap-2 mb-2">
+        <span className="text-base uppercase tracking-[0.16em] font-medium text-foreground-muted">
           {label.en}
         </span>
-        <span className="text-base text-foreground-subtle">{label.ja}</span>
+        <span className="text-lg text-foreground-subtle">{label.ja}</span>
       </div>
-      <div className="text-lg leading-relaxed min-h-[1.75rem] text-foreground">
+      <div className="text-2xl leading-relaxed min-h-[2.25rem] text-foreground">
         {value || <span className="text-foreground-subtle">—</span>}
         {streaming && value && (
-          <span className="inline-block w-1.5 h-4 ml-1 align-middle bg-energy animate-pulse-glow" />
+          <span className="inline-block w-1.5 h-5 ml-1 align-middle bg-energy animate-pulse-glow" />
         )}
       </div>
     </div>

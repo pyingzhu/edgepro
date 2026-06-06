@@ -3,7 +3,6 @@ import type { FsoaipField } from "@/lib/fsoaip/types";
 import { Card } from "@/components/primitives/card";
 import { Badge } from "@/components/primitives/badge";
 import { FieldRow } from "./field-row";
-import { HighRiskChip } from "./high-risk-chip";
 
 const FIELD_ORDER: FsoaipField[] = [
   "focus",
@@ -20,25 +19,15 @@ export function FsoaipCard({ output }: { output: ModelOutput }) {
     <Card variant={variant} className="flex flex-col gap-0 animate-fade-up">
       <header className="flex items-start justify-between mb-4 pb-4 border-b border-border">
         <div>
-          <h3 className="text-xl font-semibold text-foreground">
+          <h3 className="text-2xl font-semibold text-foreground">
             {output.label.en}
           </h3>
-          <p className="text-base text-foreground-muted">{output.label.ja}</p>
+          <p className="text-lg text-foreground-muted">{output.label.ja}</p>
         </div>
         <Badge tone={output.complete ? "success" : "accent"}>
           {output.complete ? "complete" : "streaming"}
         </Badge>
       </header>
-
-      {output.highRiskMatches.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {output.highRiskMatches
-            .filter((m) => m.matched)
-            .map((m) => (
-              <HighRiskChip key={m.fact.id} fact={m.fact} />
-            ))}
-        </div>
-      )}
 
       <div>
         {FIELD_ORDER.map((f) => (
