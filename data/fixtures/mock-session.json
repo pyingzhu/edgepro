@@ -1,0 +1,285 @@
+{
+  "events": [
+    {
+      "delayMs": 100,
+      "msg": { "type": "transcript_partial", "text": "夜中の" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "見回りで" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "田中さんが" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "ベッドから" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "転落していました。" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "意識はあり、" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "出血なし。" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "発熱もあります、" }
+    },
+    {
+      "delayMs": 120,
+      "msg": { "type": "transcript_partial", "text": "38度2分。" }
+    },
+    {
+      "delayMs": 200,
+      "msg": {
+        "type": "transcript_final",
+        "text": "夜中の見回りで田中さんがベッドから転落していました。意識はあり、出血なし。発熱もあります、38度2分。"
+      }
+    },
+
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "focus",
+        "valuePartial": "夜間の"
+      }
+    },
+    {
+      "delayMs": 60,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "focus",
+        "valuePartial": "見回り報告"
+      }
+    },
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "focus",
+        "valuePartial": "転倒"
+      }
+    },
+    {
+      "delayMs": 60,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "focus",
+        "valuePartial": "リスク・発熱"
+      }
+    },
+
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "subjective",
+        "valuePartial": "—"
+      }
+    },
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "subjective",
+        "valuePartial": "本人「"
+      }
+    },
+    {
+      "delayMs": 60,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "subjective",
+        "valuePartial": "痛くない」と返答"
+      }
+    },
+
+    {
+      "delayMs": 120,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "objective",
+        "valuePartial": "患者がベッド付近で発見された。"
+      }
+    },
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "objective",
+        "valuePartial": "発熱あり。"
+      }
+    },
+    {
+      "delayMs": 120,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "objective",
+        "valuePartial": "夜間巡視時、ベッドから転落。"
+      }
+    },
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "objective",
+        "valuePartial": "意識清明・出血なし。体温 38.2℃。"
+      }
+    },
+
+    {
+      "delayMs": 120,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "assessment",
+        "valuePartial": "経過観察が必要。"
+      }
+    },
+    {
+      "delayMs": 120,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "assessment",
+        "valuePartial": "転倒に伴う外傷リスク + 発熱の合併。"
+      }
+    },
+
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "intervention",
+        "valuePartial": "観察継続。"
+      }
+    },
+    {
+      "delayMs": 120,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "intervention",
+        "valuePartial": "バイタル測定、頭部・四肢視診、"
+      }
+    },
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "intervention",
+        "valuePartial": "クーリング開始、夜勤師長へ報告。"
+      }
+    },
+
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "base",
+        "field": "plan",
+        "valuePartial": "次回確認時に再評価。"
+      }
+    },
+    {
+      "delayMs": 120,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "plan",
+        "valuePartial": "次勤帯まで 1 時間ごとのラウンド、"
+      }
+    },
+    {
+      "delayMs": 80,
+      "msg": {
+        "type": "fsoaip_field",
+        "modelId": "edgepro",
+        "field": "plan",
+        "valuePartial": "朝に医師診察依頼。"
+      }
+    },
+
+    {
+      "delayMs": 150,
+      "msg": {
+        "type": "fact_highlight",
+        "modelId": "edgepro",
+        "fact": {
+          "id": "f1",
+          "text": "fall from bed (転倒)",
+          "field": "objective",
+          "riskWeight": "high"
+        },
+        "matched": true
+      }
+    },
+    {
+      "delayMs": 100,
+      "msg": {
+        "type": "fact_highlight",
+        "modelId": "edgepro",
+        "fact": {
+          "id": "f2",
+          "text": "fever 38.2 (発熱)",
+          "field": "objective",
+          "riskWeight": "high"
+        },
+        "matched": true
+      }
+    },
+
+    {
+      "delayMs": 200,
+      "msg": {
+        "type": "fsoaip_complete",
+        "modelId": "base",
+        "note": {
+          "focus": "夜間の見回り報告",
+          "subjective": "—",
+          "objective": "患者がベッド付近で発見された。発熱あり。",
+          "assessment": "経過観察が必要。",
+          "intervention": "観察継続。",
+          "plan": "次回確認時に再評価。"
+        }
+      }
+    },
+
+    {
+      "delayMs": 100,
+      "msg": {
+        "type": "fsoaip_complete",
+        "modelId": "edgepro",
+        "note": {
+          "focus": "転倒リスク・発熱",
+          "subjective": "本人「痛くない」と返答。",
+          "objective": "夜間巡視時、ベッドから転落。意識清明・出血なし。体温 38.2℃。",
+          "assessment": "転倒に伴う外傷リスク + 発熱の合併。",
+          "intervention": "バイタル測定、頭部・四肢視診、クーリング開始、夜勤師長へ報告。",
+          "plan": "次勤帯まで 1 時間ごとのラウンド、朝に医師診察依頼。"
+        }
+      }
+    }
+  ]
+}
