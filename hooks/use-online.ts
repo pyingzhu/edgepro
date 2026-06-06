@@ -1,19 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+// React's idiomatic pattern for external-store subscriptions like
+// navigator.onLine. Server snapshot returns null so SSR and the first
+// client render agree (no hydration mismatch); subsequent renders see
+// the real navigator.onLine value.
+
+function subscribe(callback: () => void) {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+}
+
+const getSnapshot = () => navigator.onLine;
+const getServerSnapshot = (): boolean | null => null;
 
 export function useOnline(): boolean | null {
-  // null until after first mount — keeps SSR & first client render identical
-  const [online, setOnline] = useState<boolean | null>(null);
-  useEffect(() => {
-    setOnline(navigator.onLine);
-    const on = () => setOnline(true);
-    const off = () => setOnline(false);
-    window.addEventListener("online", on);
-    window.addEventListener("offline", off);
-    return () => {
-      window.removeEventListener("online", on);
-      window.removeEventListener("offline", off);
-    };
-  }, []);
-  return online;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

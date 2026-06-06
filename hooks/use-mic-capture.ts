@@ -15,6 +15,10 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
   const [permission, setPermission] = useState<MicPermission>("unknown");
 
   // Query the Permissions API after mount — survives reloads / detects pre-grants.
+  // setState in effect is intentional here: async one-shot load + subscription
+  // setup, not reactive state. react-hooks/set-state-in-effect doesn't model
+  // this pattern, so we disable it for this effect.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (typeof navigator === "undefined" || !navigator.permissions) {
       setPermission("prompt");
@@ -36,6 +40,7 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
       if (permRef) permRef.onchange = null;
     };
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Just request permission — does NOT begin streaming.
   const requestPermission = useCallback(async () => {

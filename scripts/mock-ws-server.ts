@@ -20,7 +20,7 @@ wss.on("connection", (ws) => {
         console.log(
           `[mock] stop after ${audioFrames} audio frames; replaying fixture`,
         );
-        await replay(ws, msg.models ?? ["edgepro"]);
+        await replay(ws);
       }
     } catch (err) {
       console.error("[mock] bad message", err);
@@ -30,7 +30,7 @@ wss.on("connection", (ws) => {
   ws.on("close", () => console.log("[mock] client disconnected"));
 });
 
-async function replay(ws: import("ws").WebSocket, _models: string[]) {
+async function replay(ws: import("ws").WebSocket) {
   for (const event of fixture.events) {
     if (event.delayMs) await sleep(event.delayMs);
     ws.send(JSON.stringify(event.msg));
