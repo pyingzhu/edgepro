@@ -1,0 +1,22 @@
+[
+  {
+    "label": { "en": "ErrorCard precision", "ja": "誤り検出 精度" },
+    "base": 0.42,
+    "tuned": 0.78
+  },
+  {
+    "label": { "en": "High-risk recall", "ja": "高リスク再現" },
+    "base": 0.51,
+    "tuned": 0.89
+  },
+  {
+    "label": { "en": "Fact coverage", "ja": "情報網羅" },
+    "base": 0.63,
+    "tuned": 0.91
+  },
+  {
+    "label": { "en": "JSON validity", "ja": "JSON 整形率" },
+    "base": 0.74,
+    "tuned": 1.0
+  }
+]
