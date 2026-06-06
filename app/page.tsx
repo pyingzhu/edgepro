@@ -6,9 +6,7 @@ import { MicButton } from "@/components/mic/mic-button";
 import { Waveform } from "@/components/mic/waveform";
 import { TranscriptBubble } from "@/components/workspace/transcript-bubble";
 import { FsoaipCardGrid } from "@/components/workspace/fsoaip-card-grid";
-import { StatsStrip, type Metric } from "@/components/workspace/stats-strip";
 import { Button } from "@/components/primitives/button";
-import wandbMetrics from "@/data/fixtures/wandb-metrics.json";
 
 const MODELS = [
   { modelId: "base", label: { en: "LFM2.5-Audio base", ja: "ベース" } },
@@ -18,8 +16,6 @@ const MODELS = [
   },
 ];
 // To collapse to a single fine-tuned card (alt demo arc): keep only edgepro.
-
-const METRICS: Metric[] = wandbMetrics;
 
 export default function Page() {
   const { state, startRecording, stopRecording, sendAudioFrame, reset } =
@@ -107,9 +103,6 @@ export default function Page() {
           )}
           <TranscriptBubble text={state.transcript} />
           <FsoaipCardGrid cards={cards} />
-          {state.cards.some((c) => c.complete) && (
-            <StatsStrip metrics={METRICS} />
-          )}
           {allComplete && (
             <div className="mt-12 flex flex-col items-center gap-3">
               <Button
