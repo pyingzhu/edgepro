@@ -107,10 +107,21 @@ export default function Page() {
             <StatsStrip metrics={METRICS} />
           )}
           {allComplete && (
-            <p className="mt-10 text-center text-base text-foreground-muted">
-              Press &amp; hold the mic to record another handover ·
-              もう一度マイクを押して新しい申し送り
-            </p>
+            <div className="mt-12 flex flex-col items-center gap-3">
+              <Button
+                size="xl"
+                shape="pill"
+                onClick={() => {
+                  reset();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              >
+                🎙 Record another handover · 新しい申し送りを記録
+              </Button>
+              <p className="text-sm text-foreground-subtle">
+                Or scroll up and press &amp; hold the mic
+              </p>
+            </div>
           )}
         </section>
       )}
