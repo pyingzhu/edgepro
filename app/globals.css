@@ -12,11 +12,12 @@
 @theme {
   /* ── Type ── */
   --font-sans:
-    var(--font-inter), "Inter", var(--font-noto-jp), "Noto Sans JP", system-ui,
-    sans-serif;
+    var(--font-inter), "Inter", var(--font-noto-jp), "Noto Sans JP",
+    "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
   --font-mono: var(--font-jb-mono), "JetBrains Mono", Menlo, Monaco, monospace;
   --font-mincho:
-    var(--font-noto-serif-jp), "Noto Serif JP", "Hiragino Mincho ProN", serif;
+    var(--font-noto-serif-jp), "Noto Serif JP", "Hiragino Mincho ProN",
+    "Yu Mincho", serif;
 
   --font-size-2xs: 0.6875rem;
   --font-size-2xs--line-height: 1.4;
@@ -56,11 +57,9 @@
   --animate-slide-in-right: slide-in-right 0.2s ease-out;
   --animate-scale-in: scale-in 0.2s ease-out;
   --animate-pulse-glow: pulse-glow 1.2s ease-in-out infinite;
-}
 
-/* ── Liquid Dark palette (CSS custom properties under :root) ── */
+  /* ── Liquid Dark palette ── */
 
-:root {
   /* Surfaces — deep water + ink */
   --color-background: #06070d;
   --color-surface: #0f1118;

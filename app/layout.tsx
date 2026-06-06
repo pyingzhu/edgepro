@@ -49,7 +49,7 @@ export default function RootLayout({
       lang="ja"
       className={`${inter.variable} ${jbMono.variable} ${notoJP.variable} ${notoSerifJP.variable}`}
     >
-      <body>{children}</body>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }
