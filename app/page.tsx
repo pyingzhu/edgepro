@@ -8,17 +8,28 @@ import { TranscriptBubble } from "@/components/workspace/transcript-bubble";
 import { FsoaipCardGrid } from "@/components/workspace/fsoaip-card-grid";
 import { Button } from "@/components/primitives/button";
 
-const MODELS = [
-  { modelId: "base", label: { en: "LFM2.5-Audio base", ja: "ベース" } },
-  {
-    modelId: "edgepro",
-    label: { en: "EdgePro fine-tuned", ja: "EdgePro 学習済み" },
-  },
-];
-// To collapse to a single fine-tuned card (alt demo arc): keep only edgepro.
+const HF_URL = process.env.NEXT_PUBLIC_HF_INFERENCE_URL ?? "";
+const IS_HF = Boolean(HF_URL);
+
+// In HF mode, the Space returns a single F-SOAIP note — render one card.
+// In WS/mock mode, render base + fine-tuned side-by-side.
+const MODELS = IS_HF
+  ? [
+      {
+        modelId: "edgepro",
+        label: { en: "Tomoshibi · live", ja: "Tomoshibi · ライブ推論" },
+      },
+    ]
+  : [
+      { modelId: "base", label: { en: "LFM2.5-Audio base", ja: "ベース" } },
+      {
+        modelId: "edgepro",
+        label: { en: "EdgePro fine-tuned", ja: "EdgePro 学習済み" },
+      },
+    ];
 
 export default function Page() {
-  const { state, startRecording, stopRecording, sendAudioFrame, reset } =
+  const { state, mode, startRecording, stopRecording, sendAudioFrame, reset } =
     useEdgeproSession({ models: MODELS });
 
   const mic = useMicCapture({ onFrame: sendAudioFrame });
@@ -40,9 +51,13 @@ export default function Page() {
     }
   };
 
-  const release = () => {
+  const release = async () => {
+    // Snapshot the recorded audio BEFORE stop() tears down the worklet so the
+    // HF path can POST the WAV blob. In WS mode, getRecordedBlob returns null
+    // and stopRecording ignores it.
+    const wavBlob = mode === "hf" ? mic.getRecordedBlob() : null;
     mic.stop();
-    stopRecording();
+    await stopRecording(wavBlob);
   };
 
   // Edgepro card auto-highlights (accent glow) when shown next to base
@@ -97,7 +112,9 @@ export default function Page() {
           {state.errorMessage && (
             <div className="rounded-card border border-danger bg-danger-muted p-5 mb-8 text-base">
               {state.errorMessage === "WebSocket error"
-                ? "Backend not reachable on ws://localhost:8000/ws/session. Start it with: pnpm mock-server"
+                ? IS_HF
+                  ? `HF Space at ${HF_URL} not reachable. Check the Space is awake and the URL is correct.`
+                  : "Backend not reachable on ws://localhost:8000/ws/session. Start it with: pnpm mock-server"
                 : state.errorMessage}
             </div>
           )}

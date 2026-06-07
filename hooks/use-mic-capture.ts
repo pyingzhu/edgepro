@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { pcmFramesToWavBlob } from "@/lib/hf-client";
 
 type Options = { onFrame: (pcm: ArrayBuffer) => void; sampleRate?: number };
 
@@ -10,6 +11,7 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
   const streamRef = useRef<MediaStream | null>(null);
   const nodeRef = useRef<AudioWorkletNode | null>(null);
   const levelRef = useRef<number>(0); // 0..1 most recent RMS
+  const recordedFramesRef = useRef<Int16Array[]>([]); // for HF flow — buffered locally
   const [recording, setRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [permission, setPermission] = useState<MicPermission>("unknown");
@@ -59,6 +61,7 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
   const start = useCallback(async () => {
     try {
       setError(null);
+      recordedFramesRef.current = []; // fresh buffer per session
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true, sampleRate },
       });
@@ -72,6 +75,9 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
         e: MessageEvent<{ pcm: ArrayBuffer; rms: number }>,
       ) => {
         levelRef.current = e.data.rms;
+        // Keep a local copy for HF inference (the WS path consumes the
+        // ArrayBuffer via send-as-transferable, so we slice before passing on).
+        recordedFramesRef.current.push(new Int16Array(e.data.pcm.slice(0)));
         onFrame(e.data.pcm);
       };
       source.connect(node);
@@ -86,6 +92,16 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
       throw err; // re-throw so caller can revert session phase
     }
   }, [onFrame, sampleRate]);
+
+  /**
+   * Return the recorded audio as a 16-bit mono WAV Blob.
+   * Used by the HF inference path. Returns null if no frames captured.
+   */
+  const getRecordedBlob = useCallback((): Blob | null => {
+    const frames = recordedFramesRef.current;
+    if (frames.length === 0) return null;
+    return pcmFramesToWavBlob(frames, sampleRate);
+  }, [sampleRate]);
 
   const stop = useCallback(() => {
     nodeRef.current?.disconnect();
@@ -108,5 +124,6 @@ export function useMicCapture({ onFrame, sampleRate = 16000 }: Options) {
     levelRef,
     permission,
     requestPermission,
+    getRecordedBlob,
   };
 }
