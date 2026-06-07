@@ -2,9 +2,9 @@
 @import "tw-animate-css";
 
 /*
- * EdgePro — "Liquid Dark" theme
+ * Tomoshibi 灯火 — "Lamplight" theme
  * Tailwind v4 @theme tokens. No tailwind.config.ts.
- * Deep ink background + Liquid water-blue accent. Bilingual JA/EN type stack.
+ * Washi paper background + sumi ink + lamplight amber accent.
  *
  * Reference: docs/2026-06-06-edgepro-frontend-design.md
  */
@@ -12,12 +12,12 @@
 @theme {
   /* ── Type ── */
   --font-sans:
-    var(--font-inter), "Inter", var(--font-noto-jp), "Noto Sans JP",
-    "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+    var(--font-inter), "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic",
+    var(--font-noto-jp), "Noto Sans JP", system-ui, sans-serif;
   --font-mono: var(--font-jb-mono), "JetBrains Mono", Menlo, Monaco, monospace;
   --font-mincho:
-    var(--font-noto-serif-jp), "Noto Serif JP", "Hiragino Mincho ProN",
-    "Yu Mincho", serif;
+    "Hiragino Mincho ProN", "Yu Mincho", "YuMincho",
+    var(--font-noto-serif-jp), "Noto Serif JP", serif;
 
   --font-size-2xs: 0.6875rem;
   --font-size-2xs--line-height: 1.4;
@@ -45,11 +45,12 @@
   --radius-button: 0.5rem; /* 8px  */
   --radius-pill: 9999px;
 
-  /* ── Shadows ── */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  /* ── Shadows (lighter — paper surfaces need less weight than a dark theme) ── */
+  --shadow-card:
+    0 1px 3px rgba(28, 25, 22, 0.08), 0 1px 2px rgba(28, 25, 22, 0.05);
   --shadow-elevated:
-    0 8px 24px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-glow-accent: 0 0 16px rgba(63, 184, 229, 0.25);
+    0 8px 24px rgba(28, 25, 22, 0.1), 0 2px 8px rgba(28, 25, 22, 0.06);
+  --shadow-glow-accent: 0 0 16px rgba(217, 138, 43, 0.28);
 
   /* ── Animations ── */
   --animate-fade-in: fade-in 0.2s ease-out;
@@ -58,37 +59,37 @@
   --animate-scale-in: scale-in 0.2s ease-out;
   --animate-pulse-glow: pulse-glow 1.2s ease-in-out infinite;
 
-  /* ── Liquid Dark palette ── */
+  /* ── Tomoshibi palette ── */
 
-  /* Surfaces — deep water + ink */
-  --color-background: #06070d;
-  --color-surface: #0f1118;
-  --color-surface-elevated: #181b26;
-  --color-border: #252836;
-  --color-border-subtle: #1a1d28;
+  /* Surfaces — washi paper + lit paper */
+  --color-background: #efe9dc; /* paper (washi) */
+  --color-surface: #f6f1e6; /* paper-hi, card surface */
+  --color-surface-elevated: #fbfaf7; /* warm white, popovers / highlighted card edge */
+  --color-border: #cdc4b0; /* hairline */
+  --color-border-subtle: #e3dccb; /* paper-edge, quieter dividers */
 
-  /* Foreground */
-  --color-foreground: #e6e8ee;
-  --color-foreground-muted: #9ca1b0;
-  --color-foreground-subtle: #5e6478;
+  /* Foreground — sumi ink range */
+  --color-foreground: #1c1916; /* sumi */
+  --color-foreground-muted: #3f3a32; /* secondary ink */
+  --color-foreground-subtle: #6f6859; /* mist */
 
-  /* Primary accent — Liquid water-blue (approximation; refine if brand kit lands) */
-  --color-accent: #3fb8e5;
-  --color-accent-hover: #62c9ec;
-  --color-accent-muted: rgba(63, 184, 229, 0.15);
+  /* Primary accent — Tomoshibi lamplight amber */
+  --color-accent: #d98a2b;
+  --color-accent-hover: #b76f1f;
+  --color-accent-muted: rgba(217, 138, 43, 0.16);
 
-  /* High-energy moments — bright cyan, used sparingly */
-  --color-energy: #67e8f9;
+  /* High-energy moments — reuse lamplight (drop the cyan) */
+  --color-energy: #d98a2b;
 
-  /* State */
-  --color-danger: #f97316;
-  --color-danger-muted: rgba(249, 115, 22, 0.15);
-  --color-success: #10b981;
-  --color-success-muted: rgba(16, 185, 129, 0.15);
-  --color-warning: #fbbf24;
-  --color-warning-muted: rgba(251, 191, 36, 0.15);
-  --color-info: #3b82f6;
-  --color-info-muted: rgba(59, 130, 246, 0.15);
+  /* State — earthy, hanko-flavoured */
+  --color-danger: #b1392b; /* vermilion 朱 (seal red) */
+  --color-danger-muted: rgba(177, 57, 43, 0.15);
+  --color-success: #1f7a4d; /* forest, matches the demo bundle */
+  --color-success-muted: rgba(31, 122, 77, 0.15);
+  --color-warning: #9a6b00; /* amber-brown */
+  --color-warning-muted: rgba(154, 107, 0, 0.15);
+  --color-info: #3f3a32; /* neutral sumi-2 (no electric blue) */
+  --color-info-muted: rgba(63, 58, 50, 0.1);
 }
 
 /* ── Keyframes ── */
@@ -134,10 +135,10 @@
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 16px rgba(63, 184, 229, 0.25);
+    box-shadow: 0 0 16px rgba(217, 138, 43, 0.28);
   }
   50% {
-    box-shadow: 0 0 28px rgba(63, 184, 229, 0.55);
+    box-shadow: 0 0 28px rgba(217, 138, 43, 0.55);
   }
 }
 

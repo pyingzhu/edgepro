@@ -45,7 +45,7 @@ export function Waveform({
         const h = Math.max(0.05, v * 0.85) * height;
         const x = i * (barWidth + 4);
         const y = (height - h) / 2;
-        ctx.fillStyle = `rgba(63, 184, 229, ${0.4 + v * 0.5})`;
+        ctx.fillStyle = `rgba(217, 138, 43, ${0.45 + v * 0.5})`;
         ctx.fillRect(x, y, barWidth, h);
       }
       raf = requestAnimationFrame(draw);

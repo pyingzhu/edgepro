@@ -34,9 +34,9 @@ const notoSerifJP = Noto_Serif_JP({
 });
 
 export const metadata: Metadata = {
-  title: "EdgePro — Offline 介護 申し送り Copilot",
+  title: "灯火 · Tomoshibi — 介護 申し送り Copilot",
   description:
-    "Air-gapped Japanese nursing handover assistant. Powered by LFM2.5-Audio-1.5B-JP on AMD Ryzen AI. No cloud — no PII ever leaves the device.",
+    "Air-gapped Japanese nursing-handover assistant. No cloud — no PII ever leaves the device.",
 };
 
 export default function RootLayout({

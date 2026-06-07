@@ -10,10 +10,14 @@ export function Hero({ cta }: { cta?: ReactNode }) {
 
       <div className="max-w-5xl text-center">
         <p className="text-base tracking-[0.22em] uppercase mb-6 text-foreground-subtle">
-          EdgePro · Hack the Liquid WAY · Track 2
+          <span style={{ fontFamily: "var(--font-mincho)" }}>灯火</span>
+          {" · "}Tomoshibi · Hack the Liquid WAY
         </p>
 
-        <h1 className="text-8xl font-light leading-tight mb-4 text-foreground">
+        <h1
+          className="text-8xl font-light leading-tight mb-4 text-foreground"
+          style={{ fontFamily: "var(--font-mincho)" }}
+        >
           Offline nursing-handover copilot
         </h1>
 
@@ -25,8 +29,8 @@ export function Hero({ cta }: { cta?: ReactNode }) {
         </p>
 
         <p className="mt-8 max-w-3xl mx-auto text-2xl text-foreground-muted">
-          A nurse speaks. A local LFM2.5-Audio-1.5B-JP fine-tuned for Japanese
-          elderly care extracts the F-SOAIP facts.{" "}
+          A nurse speaks. A small audio LM, fine-tuned for Japanese elderly
+          care, extracts the F-SOAIP facts.{" "}
           <span className="text-accent">No cloud.</span> No PII leaves the
           device.
         </p>
