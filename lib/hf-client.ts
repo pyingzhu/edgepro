@@ -13,9 +13,16 @@
 
 import type { FsoaipNote } from "@/lib/fsoaip/types";
 
-/** Shape returned by the HF Space /infer endpoint. All fields optional to be lenient. */
+/**
+ * Shape returned by the HF Space /infer endpoint.
+ *
+ * Observed wire format: `{ f_soaip: {focus, subjective, ...}, f_soaip_text: string }`.
+ * We keep the type lenient (top-level fields also accepted) so a future shape
+ * change doesn't break the frontend.
+ */
 export type HfInferResponse = Partial<FsoaipNote> & {
   transcript?: string;
+  f_soaip?: Partial<FsoaipNote>;
 };
 
 /** Assemble Int16 PCM frames into a single 16-bit mono WAV blob. */
@@ -92,14 +99,15 @@ export async function inferViaHf(
   return response.json();
 }
 
-/** Lift an HF response (possibly partial) into a fully-populated FsoaipNote. */
+/** Lift an HF response (possibly partial, possibly wrapped) into a fully-populated FsoaipNote. */
 export function hfResponseToNote(r: HfInferResponse): FsoaipNote {
+  const note = r.f_soaip ?? r;
   return {
-    focus: r.focus ?? "",
-    subjective: r.subjective ?? "",
-    objective: r.objective ?? "",
-    assessment: r.assessment ?? "",
-    intervention: r.intervention ?? "",
-    plan: r.plan ?? "",
+    focus: note.focus ?? "",
+    subjective: note.subjective ?? "",
+    objective: note.objective ?? "",
+    assessment: note.assessment ?? "",
+    intervention: note.intervention ?? "",
+    plan: note.plan ?? "",
   };
 }
